@@ -104,6 +104,7 @@ namespace KerbalConstructionTime
                 {
                     DoBuildPlansList();
                     CreateDevPartsToggle();
+                    CreateStaffButtonToggle();
                 }
                 else if (_inSCSubscene)
                 {

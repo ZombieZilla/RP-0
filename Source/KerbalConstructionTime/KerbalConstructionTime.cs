@@ -69,6 +69,7 @@ namespace KerbalConstructionTime
                 KCT_GUI.InitBuildListVars();
                 KCT_GUI.InitBuildPlans();
                 KCT_GUI.InitDevPartsToggle();
+                KCT_GUI.InitStaffToggle();
                 _isGUIInitialized = true;
             }
             KCT_GUI.SetGUIPositions();

@@ -14,11 +14,13 @@ namespace KerbalConstructionTime
         private static GUIContent _devPartsContent;
         private static GUIContent _devPartsOnContent;
         private static GUIContent _devPartsOffContent;
+        private static GUIContent _devPartsHoverContent;
         private static Rect _devPartsRect;
         private static float _devPartsScale;
 
         private static Texture2D _devPartsOnTex;
         private static Texture2D _devPartsOffTex;
+        private static Texture2D _devPartsHoverTex;
 
         public static bool DevPartsVisible = true;
         public static bool FirstOnGUIUpdate = true;
@@ -75,12 +77,14 @@ namespace KerbalConstructionTime
             _devPartsToggle.active = _devPartsToggle.hover;
 
             _devPartsBackground = new Texture2D(2, 2);
-            Color[] color = new Color[4];
-            color[0] = new Color(1, 1, 1, 0);
-            color[1] = color[0];
-            color[2] = color[0];
-            color[3] = color[0];
-            _devPartsBackground.SetPixels(color);
+            ToolbarControl.LoadImageFromFile(ref _devPartsBackground, KSPUtil.ApplicationRootPath + "GameData/RP-0/PluginData/Icons/bckg");
+
+            //Color[] color = new Color[4];
+            //color[0] = new Color(1, 1, 1, 1);
+            //color[1] = color[0];
+            //color[2] = color[0];
+            //color[3] = color[0];
+            //_devPartsBackground.SetPixels(color);
 
             _devPartsToggle.normal.background = _devPartsBackground;
             _devPartsToggle.hover.background = _devPartsBackground;
@@ -90,8 +94,10 @@ namespace KerbalConstructionTime
 
             _devPartsOnTex = new Texture2D(2, 2);
             _devPartsOffTex = new Texture2D(2, 2);
+            _devPartsHoverTex = new Texture2D(2, 2);
             ToolbarControl.LoadImageFromFile(ref _devPartsOnTex, KSPUtil.ApplicationRootPath + "GameData/RP-0/PluginData/Icons/KCT_dev_parts_on");
             ToolbarControl.LoadImageFromFile(ref _devPartsOffTex, KSPUtil.ApplicationRootPath + "GameData/RP-0/PluginData/Icons/KCT_dev_parts_off");
+            ToolbarControl.LoadImageFromFile(ref _devPartsHoverTex, KSPUtil.ApplicationRootPath + "GameData/RP-0/PluginData/Icons/rp1icon");
 
             PositionAndSizeDevPartsIcon();
         }
@@ -100,6 +106,7 @@ namespace KerbalConstructionTime
         {
             Texture2D onTex = Texture2D.Instantiate(_devPartsOnTex);
             Texture2D offTex = Texture2D.Instantiate(_devPartsOffTex);
+            Texture2D hoverTex = Texture2D.Instantiate(_devPartsHoverTex);
 
             bool steamPresent = AssemblyLoader.loadedAssemblies.Any(a => a.assembly.GetName().Name == "KSPSteamCtrlr");
             bool mechjebPresent = AssemblyLoader.loadedAssemblies.Any(a => a.assembly.GetName().Name == "MechJeb2");
@@ -113,16 +120,20 @@ namespace KerbalConstructionTime
             {
                 TextureScale.Bilinear(onTex, (int)(_devPartsOnTex.width * _scale), (int)(_devPartsOnTex.height * _scale));
                 TextureScale.Bilinear(offTex, (int)(_devPartsOffTex.width * _scale), (int)(_devPartsOffTex.height * _scale));
+                TextureScale.Bilinear(hoverTex, (int)(_devPartsHoverTex.width * _scale), (int)(_devPartsHoverTex.height * _scale));
             }
             _devPartsOnContent = new GUIContent("", onTex, _tooltipOnText);
             _devPartsOffContent = new GUIContent("", offTex, _tooltipOffText);
+            _devPartsHoverContent = new GUIContent("", hoverTex, "");
 
             devPartsTooltipFrameCounter = 0;
         }
 
         private static void CreateDevPartsToggle()
         {
-            if (DevPartsVisible)
+            if (_devPartsRect.Contains(Mouse.screenPos))
+                _devPartsContent = _devPartsHoverContent;
+            else if (DevPartsVisible)
                 _devPartsContent = _devPartsOnContent;
             else
                 _devPartsContent = _devPartsOffContent;

@@ -32,12 +32,13 @@ namespace KerbalConstructionTime
             _buildPlansbutton.active = _buildPlansbutton.hover;
 
             _background = new Texture2D(2, 2);
-            Color[] color = new Color[4];
-            color[0] = new Color(1, 1, 1, 0);
-            color[1] = color[0];
-            color[2] = color[0];
-            color[3] = color[0];
-            _background.SetPixels(color);
+            ToolbarControl.LoadImageFromFile(ref _background, KSPUtil.ApplicationRootPath + "GameData/RP-0/PluginData/Icons/bckg");
+            //Color[] color = new Color[4];
+            //color[0] = new Color(1, 1, 1, 0);
+            //color[1] = color[0];
+            //color[2] = color[0];
+            //color[3] = color[0];
+            //_background.SetPixels(color);
 
             _buildPlansbutton.normal.background = _background;
             _buildPlansbutton.hover.background = _background;
